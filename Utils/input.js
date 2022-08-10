@@ -1,5 +1,11 @@
+import * as fs from 'fs'
+
 import prompt from 'prompt-sync'
 const input = prompt()
+
+export function getText(msg) {
+    return input(msg)
+}
 
 export function getNumber(msg) {
     return Number(input(msg))
@@ -27,4 +33,13 @@ export function getNumberOnRange(min, max, msg) {
     }
 
     return number
+}
+
+export function loadFile(file){
+    try{
+        const data = fs.readFileSync(file, 'utf-8')
+        return data
+    } catch (error){
+        console.error(error)
+    }
 }
