@@ -7,14 +7,18 @@ function main() {
     const milissegundos = getPositiveNumber('Milissegundos: ')
 
     // dias hh:mm:ss [day, hour, minute, second]
-    const test = convertFromMs(milissegundos)
+    const [day, hour, min, sec] = convertFromMs(milissegundos)
+
+    console.log(`\n${milissegundos}ms - ${day} dias ${hour}:${min}:${sec}`)
 }
 
 function convertFromMs(ms) {
     const day = Math.trunc(ms / 86400000)
-    const hour = day * 86400000 / 3600000 
+    const hour = Math.trunc((ms - day * 86400000) / 3600000)
+    const min = Math.trunc((ms - day * 86400000 - hour * 3600000) / 60000)
+    const sec = Math.trunc((ms - day * 86400000 - hour * 3600000 - min * 60000) / 1000)
 
-    console.log(day, hour)
+    return [day, hour, min, sec]
 }
 
 main()
