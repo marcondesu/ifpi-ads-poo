@@ -1,0 +1,10 @@
+1. Qual a diferença entre tipagem dinâmica e tipagem estática?
+    Na tipagem dinâmica os tipos são identificados em tempo de execução, enquanto
+na estática os tipos são definidos pelo desenvolvedor.
+
+2. Qual o principal problema do uso de tipagem dinâmica?
+    Porque são gerados erros em tempo de execução.
+
+6. Poderíamos dizer que a tipagem do TypeScript é fraca por uma variável do tipo
+number aceitar tanto inteiros como ponto flutuante?
+    Sim.
