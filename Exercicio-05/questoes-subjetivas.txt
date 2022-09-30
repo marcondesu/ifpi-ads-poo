@@ -1,0 +1,11 @@
+1. Sim, haverá um problema pois ela precisa ser inicializada com algum valor, seja por meio
+do construtor ou em sua declaração.
+
+3. Não foi passado nenhum parâmetro, logo o atributo "volume" não tem valor para ser inicializado.
+Ao instanciar o objeto r deve-se passar como parâmetro um valor para "volume". (let r: Radio = new Radio(0);)
+
+4.
+    a. Todos eles mostram o mesmo valor pois todos objetos estão apontando para c2.
+    b. Se perde em memória. ###
+
+
