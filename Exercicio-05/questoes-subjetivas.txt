@@ -8,4 +8,4 @@ Ao instanciar o objeto r deve-se passar como parâmetro um valor para "volume". 
     a. Todos eles mostram o mesmo valor pois todos objetos estão apontando para c2.
     b. Se perde em memória. ###
 
-
+10. A forma utilizada na questão 5 pelo motivo do feedback se a operação foi concluída ou não.
