@@ -44,7 +44,7 @@ export class Conta {
 }
 
 export class Banco {
-	_contas: Conta[] = [];
+	private _contas: Conta[] = [];
 	
 	inserir(conta: Conta): void {
         if (this.consultar(conta.numero()) == null) {
@@ -87,14 +87,16 @@ export class Banco {
 	}
 
 	private consultarPorIndice(numero: string): number {
-		let indice: number = -1;
+		let indice: number = -1
+
 		for (let i: number = 0; i < this._contas.length; i++) {
 			if (this._contas[i].numero() == numero) {
-				indice = i;
-				break;
+				indice = i
+				break
 			}
 		}
-		return indice;
+
+		return indice
 	}
 
 	alterar(conta: Conta): void {
