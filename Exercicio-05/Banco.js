@@ -1,22 +1,27 @@
+"use strict";
+exports.__esModule = true;
+exports.Banco = exports.Conta = exports.Pessoa = void 0;
+var Pessoa = /** @class */ (function () {
+    function Pessoa(nome) {
+        this._nome = nome;
+    }
+    Pessoa.prototype.nome = function () {
+        return this._nome;
+    };
+    return Pessoa;
+}());
+exports.Pessoa = Pessoa;
 var Conta = /** @class */ (function () {
     function Conta(numero, saldoInicial) {
         this._numero = numero;
         this._saldo = saldoInicial;
     }
-    Object.defineProperty(Conta.prototype, "numero", {
-        get: function () {
-            return this._numero;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Conta.prototype, "saldo", {
-        get: function () {
-            return this._saldo;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    Conta.prototype.numero = function () {
+        return this._numero;
+    };
+    Conta.prototype.saldo = function () {
+        return this._saldo;
+    };
     Conta.prototype.sacar = function (valor) {
         if (this._saldo - valor >= 0) {
             this._saldo = this._saldo - valor;
@@ -25,24 +30,17 @@ var Conta = /** @class */ (function () {
         return false;
     };
     Conta.prototype.depositar = function (valor) {
-        this._saldo = this._saldo + valor;
-    };
-    Conta.prototype.transferir = function (contaDestino, valor) {
-        if (this.sacar(valor)) {
-            contaDestino.depositar(valor);
-            return true;
-        }
-        return false;
+        this._saldo += valor;
     };
     return Conta;
 }());
+exports.Conta = Conta;
 var Banco = /** @class */ (function () {
     function Banco() {
         this._contas = [];
     }
     Banco.prototype.inserir = function (conta) {
-        var contaConsultada = this.consultar(conta.numero);
-        if (contaConsultada == null) {
+        if (this.consultar(conta.numero()) == null) {
             this._contas.push(conta);
         }
     };
@@ -50,17 +48,32 @@ var Banco = /** @class */ (function () {
         var contaConsultada;
         for (var _i = 0, _a = this._contas; _i < _a.length; _i++) {
             var conta = _a[_i];
-            if (conta.numero == numero) {
+            if (conta.numero() == numero) {
                 contaConsultada = conta;
                 break;
             }
         }
         return contaConsultada;
     };
+    Banco.prototype.sacar = function (numero, valor) {
+        var contaConsultada = this.consultar(numero);
+        if (contaConsultada != null) {
+            contaConsultada.sacar(valor);
+        }
+    };
+    Banco.prototype.transferir = function (numeroOrigem, numeroDestino, valor) {
+        var contaOrigem = this.consultar(numeroOrigem);
+        var contaDestino = this.consultar(numeroDestino);
+        if (contaOrigem != null && contaDestino != null && contaOrigem.sacar(valor)) {
+            contaDestino.depositar(valor);
+            return true;
+        }
+        return false;
+    };
     Banco.prototype.consultarPorIndice = function (numero) {
         var indice = -1;
         for (var i = 0; i < this._contas.length; i++) {
-            if (this._contas[i].numero == numero) {
+            if (this._contas[i].numero() == numero) {
                 indice = i;
                 break;
             }
@@ -68,7 +81,7 @@ var Banco = /** @class */ (function () {
         return indice;
     };
     Banco.prototype.alterar = function (conta) {
-        var indice = this.consultarPorIndice(conta.numero);
+        var indice = this.consultarPorIndice(conta.numero());
         if (indice != -1) {
             this._contas[indice] = conta;
         }
@@ -88,42 +101,20 @@ var Banco = /** @class */ (function () {
             contaConsultada.depositar(valor);
         }
     };
-    Banco.prototype.sacar = function (numero, valor) {
-        var contaConsultada = this.consultar(numero);
-        if (contaConsultada != null) {
-            contaConsultada.sacar(valor);
-        }
-    };
-    Banco.prototype.transferir = function (numeroDebito, numeroCredito, valor) {
-        var contaCredito = this.consultar(numeroCredito);
-        var contaDebito = this.consultar(numeroDebito);
-        if (contaCredito != null && contaDebito != null) {
-            contaDebito.transferir(contaCredito, valor);
-        }
-    };
-    Banco.prototype.calcularQuantidadeContas = function () {
+    Banco.prototype.quantidadeContas = function () {
         return this._contas.length;
     };
-    Banco.prototype.calcularTotalSaldos = function () {
+    Banco.prototype.totalSaldos = function () {
         var totalSaldo = 0;
         for (var _i = 0, _a = this._contas; _i < _a.length; _i++) {
             var conta = _a[_i];
-            totalSaldo += conta.saldo;
+            totalSaldo += conta.saldo();
         }
         return totalSaldo;
     };
-    Banco.prototype.calcularMediaSaldos = function () {
-        return this.calcularTotalSaldos() / this.calcularQuantidadeContas();
+    Banco.prototype.mediaSaldos = function () {
+        return this.totalSaldos() / this.quantidadeContas();
     };
     return Banco;
 }());
-var c1 = new Conta("1", 100);
-var c2 = new Conta("2", 100);
-var c3;
-c1 = c2;
-c3 = c1;
-c1.sacar(10);
-c1.transferir(c2, 50);
-console.log(c1.saldo);
-console.log(c2.saldo);
-console.log(c3.saldo);
+exports.Banco = Banco;

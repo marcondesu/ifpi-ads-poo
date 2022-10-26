@@ -1,12 +1,13 @@
-var Saudacao = /** @class */ (function () {
-    function Saudacao(texto, destinatario) {
+"use strict";
+// questão 5
+class Saudacao {
+    constructor(texto, destinatario) {
         this.texto = texto;
         this.destinatario = destinatario;
     }
-    Saudacao.prototype.obterSaudacao = function () {
-        return "".concat(this.texto, ", ").concat(this.destinatario);
-    };
-    return Saudacao;
-}());
-var greet = new Saudacao("Bom dia", "Marcos");
+    obterSaudacao() {
+        return `${this.texto}, ${this.destinatario}`;
+    }
+}
+let greet = new Saudacao("Bom dia", "Marcos");
 console.log(greet.obterSaudacao());

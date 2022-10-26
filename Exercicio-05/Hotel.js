@@ -1,11 +1,12 @@
-var Hotel = /** @class */ (function () {
-    function Hotel(quantReservas) {
+"use strict";
+// questão 2
+class Hotel {
+    constructor(quantReservas) {
         this.quantReservas = quantReservas;
     }
-    Hotel.prototype.adicionarReserva = function () {
+    adicionarReserva() {
         this.quantReservas++;
-    };
-    return Hotel;
-}());
-var hotel = new Hotel(0);
+    }
+}
+let hotel = new Hotel(0);
 console.log(hotel.quantReservas);

@@ -1,22 +1,33 @@
-class Conta {
-	private _numero: String;
+export class Pessoa {
+	private _nome: string
+
+	constructor(nome: string) {
+		this._nome = nome
+	}
+
+	nome() {
+		return this._nome
+	}
+}
+
+export class Conta {
+	private _numero: string;
 	private _saldo: number;
 
-    constructor(numero: String, saldoInicial: number) {
+    constructor(numero: string, saldoInicial: number) {
 		this._numero = numero;
 		this._saldo = saldoInicial;
 	}
 	
-	get numero(): String {
+	numero(): string {
 		return this._numero;
         
 	}
 
-	get saldo(): number {
+	saldo(): number {
 		return this._saldo;
 	}
-	
-	
+
 	sacar(valor: number): boolean {
 		if (this._saldo - valor >= 0) {
 			this._saldo = this._saldo - valor;
@@ -28,46 +39,57 @@ class Conta {
 	}
 
 	depositar(valor: number): void {
-		this._saldo = this._saldo + valor;
+		this._saldo += valor;
+	}
+}
+
+export class Banco {
+	_contas: Conta[] = [];
+	
+	inserir(conta: Conta): void {
+        if (this.consultar(conta.numero()) == null) {
+		    this._contas.push(conta);
+        }
 	}
 
-	transferir(contaDestino: Conta, valor: number): boolean {
-		if (this.sacar(valor)) {
-			contaDestino.depositar(valor);
+	consultar(numero: string): Conta {
+		let contaConsultada!: Conta;
+
+		for (let conta of this._contas) {
+			if (conta.numero() == numero) {
+				contaConsultada = conta;
+				break;
+			}
+		}
+
+		return contaConsultada;
+	}
+
+	sacar(numero: string, valor: number): void {
+		let contaConsultada = this.consultar(numero);
+
+		if (contaConsultada != null) {
+			contaConsultada.sacar(valor);
+		}
+	}
+
+	transferir(numeroOrigem: string, numeroDestino: string, valor: number): boolean {
+		const contaOrigem: Conta = this.consultar(numeroOrigem);
+		const contaDestino: Conta = this.consultar(numeroDestino);
+
+		if (contaOrigem != null && contaDestino != null && contaOrigem.sacar(valor)) {
+			contaDestino.depositar(valor)
 
 			return true
 		}
 
 		return false
 	}
-}
 
-class Banco {
-	private _contas: Conta[] = [];
-	
-	inserir(conta: Conta): void {
-        let contaConsultada = this.consultar(conta.numero);
-
-        if (contaConsultada == null) {
-		    this._contas.push(conta);
-        }
-	}
-
-	consultar(numero: String): Conta {
-		let contaConsultada!: Conta;
-		for (let conta of this._contas) {
-			if (conta.numero == numero) {
-				contaConsultada = conta;
-				break;
-			}
-		}
-		return contaConsultada;
-	}
-
-	private consultarPorIndice(numero: String): number {
+	private consultarPorIndice(numero: string): number {
 		let indice: number = -1;
 		for (let i: number = 0; i < this._contas.length; i++) {
-			if (this._contas[i].numero == numero) {
+			if (this._contas[i].numero() == numero) {
 				indice = i;
 				break;
 			}
@@ -76,7 +98,7 @@ class Banco {
 	}
 
 	alterar(conta: Conta): void {
-		let indice: number = this.consultarPorIndice(conta.numero);
+		let indice: number = this.consultarPorIndice(conta.numero());
 		if (indice != -1) {
 			this._contas[indice] = conta;
 		}
@@ -94,7 +116,7 @@ class Banco {
 		} 
 	}
 
-	depositar(numero: String, valor: number): void {
+	depositar(numero: string, valor: number): void {
 		let contaConsultada = this.consultar(numero);
 
 		if (contaConsultada != null) {
@@ -102,52 +124,20 @@ class Banco {
 		}
 	}
 
-    sacar(numero: String, valor: number): void {
-        let contaConsultada = this.consultar(numero);
-
-        if (contaConsultada != null) {
-            contaConsultada.sacar(valor);
-        }
-    }
-
-    transferir(numeroDebito: string, numeroCredito: string, valor: number){
-        let contaCredito: Conta = this.consultar(numeroCredito);
-        let contaDebito: Conta = this.consultar(numeroDebito);
-
-        if (contaCredito != null && contaDebito != null) {
-            contaDebito.transferir(contaCredito, valor);
-        }
-    }
-
-    calcularQuantidadeContas(): number {
+    quantidadeContas(): number {
         return this._contas.length;
     }
 
-    calcularTotalSaldos(): number {
+    totalSaldos(): number {
         let totalSaldo: number = 0;
         for (let conta of this._contas) {
-            totalSaldo += conta.saldo;
+            totalSaldo += conta.saldo();
         }
 
         return totalSaldo;
     }
 
-    calcularMediaSaldos() {
-        return this.calcularTotalSaldos()/this.calcularQuantidadeContas();
+    mediaSaldos() {
+        return this.totalSaldos() / this.quantidadeContas();
     }
-
 }
-
-let c1: Conta = new Conta("1", 100);
-let c2: Conta = new Conta("2", 100);
-let c3: Conta;
-
-c1 = c2;
-c3 = c1;
-
-c1.sacar(10);
-c1.transferir(c2, 50);
-
-console.log(c1.saldo);
-console.log(c2.saldo);
-console.log(c3.saldo);

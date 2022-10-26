@@ -1,36 +1,36 @@
+"use strict";
 // questão 7
-var Equipamento = /** @class */ (function () {
-    function Equipamento() {
+class Equipamento {
+    constructor() {
         this.ligado = false;
     }
-    Equipamento.prototype.liga = function () {
+    liga() {
         if (!this.ligado) { // se não estiver ligado, ligar
             this.ligado = true;
         }
-    };
-    Equipamento.prototype.desliga = function () {
+    }
+    desliga() {
         if (this.ligado) { // se estiver ligado, desligar
             this.ligado = false;
         }
-    };
-    Equipamento.prototype.inverte = function () {
+    }
+    inverte() {
         if (this.ligado) { // se estiver ligado, desligar
             this.desliga();
         }
         else { // se estiver desligado, ligar
             this.liga();
         }
-    };
-    Equipamento.prototype.estaLigado = function () {
+    }
+    estaLigado() {
         return this.ligado;
-    };
-    return Equipamento;
-}());
-var equip = new Equipamento();
-console.log("Est\u00E1 ligado? ".concat(equip.estaLigado()));
+    }
+}
+let equip = new Equipamento();
+console.log(`Está ligado? ${equip.estaLigado()}`);
 equip.inverte();
-console.log("Est\u00E1 ligado? ".concat(equip.estaLigado()));
+console.log(`Está ligado? ${equip.estaLigado()}`);
 equip.desliga();
-console.log("Est\u00E1 ligado? ".concat(equip.estaLigado()));
+console.log(`Está ligado? ${equip.estaLigado()}`);
 equip.liga();
-console.log("Est\u00E1 ligado? ".concat(equip.estaLigado()));
+console.log(`Está ligado? ${equip.estaLigado()}`);
