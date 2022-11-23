@@ -43,6 +43,40 @@ export class Conta {
 	}
 }
 
+export class Poupanca extends Conta {
+	private _taxaJuros: number
+
+	constructor(numero: string, saldoInicial: number, taxaDeJuros: number) {
+		super(numero, saldoInicial)
+		this._taxaJuros = taxaDeJuros
+	}
+
+	taxaJuros(): number {
+		return this._taxaJuros
+	}
+
+	renderJuros(): void {
+		this.depositar(this.saldo() * this.taxaJuros() / 100)
+	}
+}
+
+export class ContaImposto extends Conta {
+	private _taxaDesconto: number
+
+	constructor(numero: string, saldoInicial: number, taxaDeDesconto: number) {
+		super(numero, saldoInicial)
+		this._taxaDesconto = taxaDeDesconto
+	}
+
+	sacar(valor: number): boolean {
+		if (super.sacar(valor + valor * this._taxaDesconto / 100)) {
+			return true
+		}
+
+		return false
+	}
+}
+
 export class Banco {
 	private _contas: Conta[] = [];
 	
@@ -124,6 +158,10 @@ export class Banco {
 		if (contaConsultada != null) {
 			contaConsultada.depositar(valor);
 		}
+	}
+
+	renderJuros(numero: string): void {
+
 	}
 
     quantidadeContas(): number {

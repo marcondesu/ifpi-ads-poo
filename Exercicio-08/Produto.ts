@@ -28,14 +28,34 @@ class ProdutoPerecivel {
         this._dataValidade = new Date(dataValidade)
     }
 
-    /* verificarValidade(dataAtual: Date): void {
+    verificarValidade(dataAtual: Date): boolean {
+        let dtAtualValor = getData(dataAtual)
+        let dtValidadeValor = getData(this._dataValidade)
 
-    } */
+        console.log(dtAtualValor, dtValidadeValor)
+
+        if (dtValidadeValor - dtAtualValor > 0) {
+            return true
+        }
+
+        return false
+    }
+}
+
+function getData(data: Date): number {
+    let valor: number = data.getFullYear()
+
+    valor += data.getDate()
+    valor += data.getMonth()
+    valor += data.getDay()
+
+    return valor
 }
 
 let produto_perecivel: ProdutoPerecivel = new ProdutoPerecivel('2022-12-13')
 let data_1: Date = new Date('2022-12-11')
 let data_2: Date = new Date('2022-12-13')
 
-console.log(data_1.toSource())
-console.log(data_2.valueOf())
+produto_perecivel.verificarValidade(data_1)
+// console.log(data_1.toSo)
+// console.log(data_2.valueOf())

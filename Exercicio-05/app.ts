@@ -1,8 +1,7 @@
-const input = require('prompt-sync')()
-import { Banco, Conta, Pessoa } from "./Banco"
+export const input = require('prompt-sync')()
+import { Banco, Conta, ContaImposto, Poupanca } from "./Banco"
 
 let banco: Banco = new Banco()
-
 let opcao: string
 
 do {
@@ -10,56 +9,42 @@ do {
     mostrarMenu()
     opcao = input('> ')
 
+    console.clear()
+
     switch(opcao) {
         case '1':
-            console.clear()
             inserir()
-
-            enterToContinue()
             break
 
         case '2':
-            console.clear()
             consultar()
-
-            enterToContinue()
             break
         
         case '3':
-            console.clear()
             sacar()
-
-            enterToContinue()
             break
         
         case '4':
-            console.clear()
             depositar()
-
-            enterToContinue()
             break
 
         case '5':
-            console.clear()
             excluir()
-
-            enterToContinue()
             break
 
         case '6':
-            console.clear()
             transferir()
-
-            enterToContinue()
             break
 
         case '7':
-            console.clear()
             totalizacoes()
-
-            enterToContinue()
             break
+        
+        case '8':
+            renderJuros()
         }
+
+        enterToContinue()
 } while (opcao != '0')
 
 function mostrarMenu(): void {
@@ -70,6 +55,7 @@ function mostrarMenu(): void {
     menu += '5 - Excluir\n'
     menu += '6 - Transferir\n'
     menu += '7 - Totalizações\n'
+    menu += '8 - Render juros\n'
     menu += '0 - Sair\n'
 
     console.log(menu)
@@ -91,12 +77,37 @@ function obterConta(): Conta {
     return conta
 }
 
+function obterTipoDeConta(): string {
+    console.log('c - Conta comum');
+    console.log('p - Conta poupança');
+    console.log('i - Conta imposto\n');
+    
+    const tipo = input('Tipo da conta: ').toLowerCase()
+
+    if (tipo != 'c' && tipo != 'p' && tipo != 'i') {
+        console.log('\n- Operação inválida! Selecione um dos tipos de conta acima.\n')
+        
+        return obterTipoDeConta()
+    }
+
+    return tipo
+}
+
 function inserir(): void {
     console.log('### Cadastrar conta ###\n')
     
+    const tipo: string = obterTipoDeConta()
     let numero: string = input('Número da conta: ')
 
-    let conta: Conta = new Conta(numero, 0)
+    let conta!: Conta
+    
+    if (tipo == 'c') {
+        conta = new Conta(numero, 0);
+    } else if (tipo == 'p') {
+        conta = new Poupanca(numero, 0, 0.5)
+    } else {
+        conta = new ContaImposto(numero, 0, 0.38);
+    }
     
     if (banco.consultar(numero) != null) {
         console.log('\n- Operação inválida. Não é possível inserir uma conta com um número existente.')
@@ -188,4 +199,14 @@ function totalizacoes(): void {
     console.log(`Quantidade de contas: ${banco.quantidadeContas()}`)
     console.log(`Total de saldos nas contas: R$${banco.totalSaldos().toFixed(2)}`)
     console.log(`Média de saldo: R$${banco.mediaSaldos().toFixed(2)}`)
+}
+
+function renderJuros(): void {
+    const conta = obterConta()
+
+    if (conta instanceof Poupanca) {
+        (<Poupanca> conta).renderJuros()
+
+        console.log('\n- Juros rendendo...');
+    }
 }
