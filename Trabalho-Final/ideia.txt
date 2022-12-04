@@ -1,0 +1,13 @@
+Aplicação de streaming de vídeo
+
+- Cada plano possui uma quantidade limite de usuários;
+- Planos: básico, padrão, premium;
+
+### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### 
+
+class Usuario
+- id: string
+- nome: string
+
+class PlanoBasico
+- usuarios: Usuario
