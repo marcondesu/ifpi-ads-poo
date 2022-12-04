@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Banco = exports.ContaImposto = exports.Poupanca = exports.Conta = exports.Pessoa = void 0;
+const Excecoes_1 = require("./Excecoes");
 class Pessoa {
     constructor(nome) {
         this._nome = nome;
@@ -74,20 +75,16 @@ class Banco {
             this._contas.push(conta);
         }
     }
-    consultar(numero) {
-        let contaConsultada;
-        for (let conta of this._contas) {
-            if (conta.numero() == numero) {
-                contaConsultada = conta;
-                break;
-            }
-        }
-        return contaConsultada;
-    }
     sacar(numero, valor) {
         let contaConsultada = this.consultar(numero);
         if (contaConsultada != null) {
             contaConsultada.sacar(valor);
+        }
+    }
+    depositar(numero, valor) {
+        let contaConsultada = this.consultar(numero);
+        if (contaConsultada != null) {
+            contaConsultada.depositar(valor);
         }
     }
     transferir(numeroOrigem, numeroDestino, valor) {
@@ -100,6 +97,20 @@ class Banco {
         }
         return false;
     }
+    consultar(numero) {
+        let contaConsultada;
+        for (let conta of this._contas) {
+            console.log(conta.numero());
+            if (conta.numero() == numero) {
+                contaConsultada = conta;
+                break;
+            }
+        }
+        if (contaConsultada == null) {
+            throw new Excecoes_1.ContaInexistenteError("Conta não encontrada.");
+        }
+        return contaConsultada;
+    }
     consultarPorIndice(numero) {
         let indice = -1;
         for (let i = 0; i < this._contas.length; i++) {
@@ -108,7 +119,12 @@ class Banco {
                 break;
             }
         }
+        if (indice == -1) {
+            throw new Excecoes_1.ContaInexistenteError("Conta não encontrada.");
+        }
         return indice;
+    }
+    renderJuros(numero) {
     }
     alterar(conta) {
         let indice = this.consultarPorIndice(conta.numero());
@@ -124,14 +140,6 @@ class Banco {
             }
             this._contas.pop();
         }
-    }
-    depositar(numero, valor) {
-        let contaConsultada = this.consultar(numero);
-        if (contaConsultada != null) {
-            contaConsultada.depositar(valor);
-        }
-    }
-    renderJuros(numero) {
     }
     quantidadeContas() {
         return this._contas.length;

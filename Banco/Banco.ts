@@ -1,3 +1,5 @@
+import { ContaInexistenteError } from './Excecoes'
+
 export class Pessoa {
 	private _nome: string
 
@@ -94,24 +96,19 @@ export class Banco {
         }
 	}
 
-	consultar(numero: string): Conta {
-		let contaConsultada!: Conta;
-
-		for (let conta of this._contas) {
-			if (conta.numero() == numero) {
-				contaConsultada = conta;
-				break;
-			}
-		}
-
-		return contaConsultada;
-	}
-
 	sacar(numero: string, valor: number): void {
 		let contaConsultada = this.consultar(numero);
 
 		if (contaConsultada != null) {
 			contaConsultada.sacar(valor);
+		}
+	}
+
+	depositar(numero: string, valor: number): void {
+		let contaConsultada = this.consultar(numero);
+
+		if (contaConsultada != null) {
+			contaConsultada.depositar(valor);
 		}
 	}
 
@@ -129,6 +126,25 @@ export class Banco {
 		return false
 	}
 
+	consultar(numero: string): Conta {
+		let contaConsultada!: Conta;
+
+		for (let conta of this._contas) {
+			console.log(conta.numero())
+			if (conta.numero() == numero) {
+				contaConsultada = conta;
+				break;
+			}
+		}
+
+		
+		if (contaConsultada == null) {
+			throw new ContaInexistenteError("Conta não encontrada.")
+		}
+		
+		return contaConsultada;
+	}
+
 	private consultarPorIndice(numero: string): number {
 		let indice: number = -1
 
@@ -139,7 +155,15 @@ export class Banco {
 			}
 		}
 
+		if (indice == -1) {
+			throw new ContaInexistenteError("Conta não encontrada.")
+		}
+
 		return indice
+	}
+
+	renderJuros(numero: string): void {
+
 	}
 
 	alterar(conta: Conta): void {
@@ -161,18 +185,6 @@ export class Banco {
 		} 
 	}
 
-	depositar(numero: string, valor: number): void {
-		let contaConsultada = this.consultar(numero);
-
-		if (contaConsultada != null) {
-			contaConsultada.depositar(valor);
-		}
-	}
-
-	renderJuros(numero: string): void {
-
-	}
-
     quantidadeContas(): number {
         return this._contas.length;
     }
@@ -186,7 +198,7 @@ export class Banco {
         return totalSaldo;
     }
 
-    mediaSaldos() {
+    mediaSaldos(): number {
         return this.totalSaldos() / this.quantidadeContas();
     }
 }
