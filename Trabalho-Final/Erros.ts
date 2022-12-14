@@ -1,7 +1,25 @@
-class LimiteUsuario extends Error {
+class LimiteDeUsuariosError extends Error {
     constructor(message: string) {
         super(message)
     }
 }
 
-export { LimiteUsuario }
+class ContaJaInseridaError extends Error {
+    constructor(message: string) {
+        super(message)
+    }
+}
+
+class UsuarioNaoEncontradoError extends Error {
+    constructor(message: string) {
+        super(message)
+    }
+}
+
+class ContaInexistenteError extends Error {
+    constructor(message: string) {
+        super(message)
+    }
+}
+
+export { LimiteDeUsuariosError, ContaJaInseridaError, UsuarioNaoEncontradoError, ContaInexistenteError }

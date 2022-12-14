@@ -1,13 +1,42 @@
 Aplicação de streaming de vídeo
 
-- Cada plano possui uma quantidade limite de usuários;
-- Planos: básico, padrão, premium;
+- Cada tipo de conta possui uma quantidade limite de usuários;
+- Tipos: básica, padrão, premium;
 
 ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### 
 
-class Usuario
-- id: string
-- nome: string
+interface IConta
+    inserir(usuario: Usuario): void
+    alterar(usuario: Usuario): void
+    infoUsers(): string
 
-class PlanoBasico
-- usuarios: Usuario
+class Usuario
+    _id: string
+    _nome: string
+    get id: string
+    get nome: string
+
+class ContaBasica implements IConta
+    _id: string
+    _usuarios: Usuario[]
+    get id: string
+    get usuarios: Usuario[]
+    inserir(usuario: Usuario): void -> limite: 1
+    alterar(usuario: Usuario): void
+    infoUsers(): string
+
+class ContaPadrao extends ContaBasica
+    inserir(usuario: Usuario) -> limite: 2 (sobrescrita)
+    consultar(id: string): boolean
+    _consultarPorIndice(id: string): number
+    excluir(id: string): void
+
+class ContaPremium extends ContaBasica
+    inserir(usuario: Usuario) -> limite: 4 (sobrescrita)
+
+class PlataformaDeStreaming
+    _contas: ContaBasica[]
+    inserir(conta: ContaBasica): void
+    consultar(numero: string): ContaBasica
+    _consultarPorIndice(numero: id): number
+    excluir(id: string): void
